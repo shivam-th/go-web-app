@@ -1,3 +1,3 @@
-module github.com/iam-veeramalla/go-web-ap
+module github.com/shivam-th/go-webserver-app
 
-// go 1.22.5
+go 1.23.4

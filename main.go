@@ -6,16 +6,28 @@ import (
 	"net/http"
 )
 
+func homePage(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "static/index.html")
+}
+
+func aboutPage(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "static/about.html")
+}
+
+func contactPage(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "static/contact.html")
+}
+
 func formHandler(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		fmt.Fprintf(w, "ParseForm() err: %v", err)
 		return
 	}
-	fmt.Fprintf(w, "POST request successful\n")
+	fmt.Fprintf(w, "Feedback submitted successful\n")
 	name := r.FormValue("name")
-	address := r.FormValue("address")
+	feedback := r.FormValue("feedback")
 	fmt.Fprintf(w, "Name = %s\n", name)
-	fmt.Fprintf(w, "Address = %s\n", address)
+	fmt.Fprintf(w, "Feedback = %s\n", feedback)
 }
 
 func helloHandler(w http.ResponseWriter, r *http.Request) {
@@ -33,6 +45,10 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	fileServer := http.FileServer(http.Dir("./static"))
 	http.Handle("/", fileServer)
+
+	http.HandleFunc("/home", homePage)
+	http.HandleFunc("/about", aboutPage)
+	http.HandleFunc("/contact", contactPage)
 
 	http.HandleFunc("/form", formHandler)
 	http.HandleFunc("/hello", helloHandler)
